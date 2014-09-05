@@ -2502,6 +2502,8 @@ create_hashjoin_plan(PlannerInfo *root,
 		}
 	}
 
+	elog(NOTICE, "I am here: ruizhe, createplan.c");
+
 	/*
 	 * Build the hash node and hash join node.
 	 */
@@ -2511,11 +2513,27 @@ create_hashjoin_plan(PlannerInfo *root,
 						  skewInherit,
 						  skewColType,
 						  skewColTypmod);
+
+	//huangruizhe//
+	Oid			skewTable2 = InvalidOid;
+	AttrNumber	skewColumn2 = InvalidAttrNumber;
+	bool		skewInherit2 = false;
+	Oid			skewColType2 = InvalidOid;
+	int32		skewColTypmod2 = -1;
+	Hash		*outer_hash_plan;
+	
+	outer_hash_plan = make_hash(outer_plan,
+						  skewTable2,
+						  skewColumn2,
+						  skewInherit2,
+						  skewColType2,
+						  skewColTypmod2);
+
 	join_plan = make_hashjoin(tlist,
 							  joinclauses,
 							  otherclauses,
 							  hashclauses,
-							  outer_plan,
+							  (Plan *) outer_hash_plan,//outer_plan,
 							  (Plan *) hash_plan,
 							  best_path->jpath.jointype);
 

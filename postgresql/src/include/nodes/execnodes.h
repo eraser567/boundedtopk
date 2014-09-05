@@ -1620,7 +1620,7 @@ typedef struct HashJoinState
 	List	   *hj_OuterHashKeys;		/* list of ExprState nodes */
 	List	   *hj_InnerHashKeys;		/* list of ExprState nodes */
 	List	   *hj_HashOperators;		/* list of operator OIDs */
-	HashJoinTable hj_HashTable;
+	HashJoinTable hj_InnerHashTable;
 	uint32		hj_CurHashValue;
 	int			hj_CurBucketNo;
 	int			hj_CurSkewBucketNo;
@@ -1633,6 +1633,11 @@ typedef struct HashJoinState
 	int			hj_JoinState;
 	bool		hj_MatchedOuter;
 	bool		hj_OuterNotEmpty;
+
+	//huangruizhe//
+	HashJoinTable hj_OuterHashTable;
+	bool hj_isOuter;
+	bool hj_InnerNotEmpty;
 } HashJoinState;
 
 
@@ -1817,6 +1822,8 @@ typedef struct HashState
 	HashJoinTable hashtable;	/* hash table for the hashjoin */
 	List	   *hashkeys;		/* list of ExprState nodes */
 	/* hashkeys is same as parent's hj_InnerHashKeys */
+	uint32		hashvalue; //huangruizhe
+	bool isOuter;
 } HashState;
 
 /* ----------------

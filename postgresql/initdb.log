@@ -1,0 +1,36 @@
+
+PostgreSQL stand-alone backend 9.4beta2
+backend> backend> backend> outer:
+	 1: objoid = "1242"	(typeid = 26, len = 4, typmod = -1, byval = t)
+	 2: classname = "pg_proc"	(typeid = 19, len = 64, typmod = -1, byval = f)
+	 3: objsubid = "0"	(typeid = 23, len = 4, typmod = -1, byval = t)
+	 4: description = "I/O"	(typeid = 25, len = -1, typmod = -1, byval = f)
+	----
+outer:
+	 1:  = "1247"	(typeid = 26, len = 4, typmod = -1, byval = t)
+	 2:  = "pg_type"	(typeid = 19, len = 64, typmod = -1, byval = f)
+	----
+outer:
+	 1: objoid = "1243"	(typeid = 26, len = 4, typmod = -1, byval = t)
+	 2: classname = "pg_proc"	(typeid = 19, len = 64, typmod = -1, byval = f)
+	 3: objsubid = "0"	(typeid = 23, len = 4, typmod = -1, byval = t)
+	 4: description = "I/O"	(typeid = 25, len = -1, typmod = -1, byval = f)
+	----
+outer:
+	 1:  = "1249"	(typeid = 26, len = 4, typmod = -1, byval = t)
+	 2:  = "pg_attribute"	(typeid = 19, len = 64, typmod = -1, byval = f)
+	----
+outer:
+	 1: objoid = "1244"	(typeid = 26, len = 4, typmod = -1, byval = t)
+	 2: classname = "pg_proc"	(typeid = 19, len = 64, typmod = -1, byval = f)
+	 3: objsubid = "0"	(typeid = 23, len = 4, typmod = -1, byval = t)
+	 4: description = "I/O"	(typeid = 25, len = -1, typmod = -1, byval = f)
+	----
+outer:
+	 1:  = "1255"	(typeid = 26, len = 4, typmod = -1, byval = t)
+	 2:  = "pg_proc"	(typeid = 19, len = 64, typmod = -1, byval = f)
+	----
+inner:
+	 1:  = "1244"	(typeid = 26, len = 4, typmod = -1, byval = t)
+	 2:  = "pg_proc"	(typeid = 19, len = 64, typmod = -1, byval = f)
+	----

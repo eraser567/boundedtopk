@@ -57,9 +57,80 @@ static void ExecHashRemoveNextSkewBucket(HashJoinTable hashtable);
 TupleTableSlot *
 ExecHash(HashState *node)
 {
-	elog(ERROR, "Hash node does not support ExecProcNode call convention");
+	//elog(ERROR, "Hash node does not support ExecProcNode call convention");
+	//return NULL;
+	
+	//huangruizhe: begin
+	PlanState  *outerNode;
+	List	   *hashkeys;
+	HashJoinTable hashtable;
+	TupleTableSlot *slot;
+	ExprContext *econtext;
+	uint32		hashvalue;
+
+	/* must provide our own instrumentation support */
+	//if (node->ps.instrument)
+	//	InstrStartNode(node->ps.instrument);
+
+	/*
+	 * get state info from node
+	 */
+	outerNode = outerPlanState(node);
+	hashtable = node->hashtable;
+
+	/*
+	 * set expression context
+	 */
+	hashkeys = node->hashkeys;
+	econtext = node->ps.ps_ExprContext;
+
+	/*
+	 * get all inner tuples and insert into the hash table (or temp files)
+	 */
+	//for (;;)
+	{
+		slot = ExecProcNode(outerNode);
+		if (TupIsNull(slot))
+			return NULL;
+		/* We have to compute the hash value */
+		if(node->isOuter) 
+		  econtext->ecxt_outertuple = slot;
+		else
+			econtext->ecxt_innertuple = slot;
+
+		if (ExecHashGetHashValue(hashtable, econtext, hashkeys,
+								 node->isOuter, hashtable->keepNulls,
+								 &hashvalue))
+		{
+			int			bucketNumber;
+
+			bucketNumber = ExecHashGetSkewBucket(hashtable, hashvalue);
+			if (bucketNumber != INVALID_SKEW_BUCKET_NO)
+			{
+				/* It's a skew tuple, so put it into that hash table */
+				ExecHashSkewTableInsert(hashtable, slot, hashvalue,
+										bucketNumber);
+			}
+			else
+			{
+				/* Not subject to skew optimization, so insert normally */
+				ExecHashTableInsert(hashtable, slot, hashvalue);
+			}
+			hashtable->totalTuples += 1;
+			node->hashvalue = hashvalue;
+			return slot;
+		}
+	}
+
+	/* must provide our own instrumentation support */
+	//if (node->ps.instrument)
+	//	InstrStopNode(node->ps.instrument, hashtable->totalTuples);
+
 	return NULL;
+	
+	//huangruizhe: end
 }
+
 
 /* ----------------------------------------------------------------
  *		MultiExecHash
@@ -466,9 +537,10 @@ ExecChooseHashTableSize(double ntuples, int tupwidth, bool useskew,
 	/* also ensure we avoid integer overflow in nbatch and nbuckets */
 	max_pointers = Min(max_pointers, INT_MAX / 2);
 
-	if (inner_rel_bytes > hash_table_bytes)
+	//huangruizhe
+	/*if (inner_rel_bytes > hash_table_bytes)
 	{
-		/* We'll need multiple batches */
+		// We'll need multiple batches //
 		long		lbuckets;
 		double		dbatch;
 		int			minbatch;
@@ -484,7 +556,7 @@ ExecChooseHashTableSize(double ntuples, int tupwidth, bool useskew,
 		while (nbatch < minbatch)
 			nbatch <<= 1;
 	}
-	else
+	else*/
 	{
 		/* We expect the hashtable to fit in memory */
 		double		dbuckets;
@@ -904,9 +976,16 @@ ExecScanHashBucket(HashJoinState *hjstate,
 				   ExprContext *econtext)
 {
 	List	   *hjclauses = hjstate->hashclauses;
-	HashJoinTable hashtable = hjstate->hj_HashTable;
 	HashJoinTuple hashTuple = hjstate->hj_CurTuple;
 	uint32		hashvalue = hjstate->hj_CurHashValue;
+	HashJoinTable hashtable;
+	if (hjstate->hj_isOuter) {
+		hashtable = hjstate->hj_InnerHashTable;
+	}
+	else {
+		hashtable = hjstate->hj_OuterHashTable;
+	}
+
 
 	/*
 	 * hj_CurTuple is the address of the tuple last returned from the current
@@ -983,8 +1062,14 @@ ExecPrepHashTableForUnmatched(HashJoinState *hjstate)
 bool
 ExecScanHashTableForUnmatched(HashJoinState *hjstate, ExprContext *econtext)
 {
-	HashJoinTable hashtable = hjstate->hj_HashTable;
 	HashJoinTuple hashTuple = hjstate->hj_CurTuple;
+	HashJoinTable hashtable;
+	if(hjstate->hj_isOuter) {
+		hashtable = hjstate->hj_OuterHashTable;
+	}
+	else {
+		hashtable = hjstate->hj_InnerHashTable; 
+	}
 
 	for (;;)
 	{

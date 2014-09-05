@@ -1788,7 +1788,7 @@ setup_description(void)
 	snprintf(cmd, sizeof(cmd),
 			 "\"%s\" %s template1 >%s",
 			 backend_exec, backend_options,
-			 DEVNULL);
+			 "/mnt/boundedtopk/ruizhe/pg/boundedtopk/postgresql/initdb.log");//EVNULL);
 
 	PG_CMD_OPEN;
 
