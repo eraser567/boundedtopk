@@ -1009,7 +1009,7 @@ ExecScanHashBucket(HashJoinState *hjstate,
 
 			/* insert hashtable's tuple into exec slot so ExecQual sees it */
 			inntuple = ExecStoreMinimalTuple(HJTUPLE_MINTUPLE(hashTuple),
-											 hjstate->hj_HashTupleSlot,
+											 hjstate->hj_isOuter ? hjstate->hj_HashTupleSlot : hjstate->hj_HashOuterTupleSlot,
 											 false);	/* do not pfree */
 			econtext->ecxt_innertuple = inntuple;
 

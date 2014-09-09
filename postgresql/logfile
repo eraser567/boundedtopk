@@ -1704,3 +1704,7 @@ result:
 	 4: b1 = "4"	(typeid = 23, len = 4, typmod = -1, byval = t)
 	 5: s1 = "3"	(typeid = 23, len = 4, typmod = -1, byval = t)
 	----
+LOG:  received smart shutdown request
+LOG:  autovacuum launcher shutting down
+LOG:  shutting down
+LOG:  database system is shut down

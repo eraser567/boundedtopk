@@ -628,6 +628,12 @@ ExecInitHashJoin(HashJoin *node, EState *estate, int eflags)
 		TupleTableSlot *slot = hashstate->ps.ps_ResultTupleSlot;
 
 		hjstate->hj_HashTupleSlot = slot;
+
+		// huangruizhe
+		hashstate = (HashState *) outerPlanState(hjstate);
+		slot = hashstate->ps.ps_ResultTupleSlot;
+
+		hjstate->hj_HashOuterTupleSlot = slot;
 	}
 
 	/*
