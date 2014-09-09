@@ -223,6 +223,8 @@ ExecHashJoin(HashJoinState *node)
 
 			case HJ_NEED_NEW_OUTER:
 
+				node->hj_isSwapped = false;
+				
 				/*
 				 * We don't have an outer tuple, try to get the next one
 				 */
@@ -335,6 +337,14 @@ ExecHashJoin(HashJoinState *node)
 				 */
 				CHECK_FOR_INTERRUPTS();
 
+				if (node->hj_isSwapped) {
+					TupleTableSlot *temptuple = econtext->ecxt_innertuple;
+					econtext->ecxt_innertuple = econtext->ecxt_outertuple;
+					econtext->ecxt_outertuple = temptuple;
+					node->hj_isSwapped = false;
+				}		
+				Assert(!node->hj_isSwapped);
+
 				/*
 				 * Scan the selected hash bucket for matches to current outer
 				 */
@@ -348,6 +358,12 @@ ExecHashJoin(HashJoinState *node)
 				printf("inner:\n");
 				print_slot(econtext->ecxt_innertuple);
 
+				if (!node->hj_isOuter) {
+					TupleTableSlot *temptuple = econtext->ecxt_innertuple;
+					econtext->ecxt_innertuple = econtext->ecxt_outertuple;
+					econtext->ecxt_outertuple = temptuple;
+					node->hj_isSwapped = true;
+				}
 				/*
 				 * We've got a match, but still need to test non-hashed quals.
 				 * ExecScanHashBucket already set up all the state needed to

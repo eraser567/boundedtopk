@@ -1638,6 +1638,8 @@ typedef struct HashJoinState
 	HashJoinTable hj_OuterHashTable;
 	bool hj_isOuter;
 	bool hj_InnerNotEmpty;
+	bool hj_isSwapped;
+	TupleTableSlot *hj_HashOuterTupleSlot;
 } HashJoinState;
 
 
