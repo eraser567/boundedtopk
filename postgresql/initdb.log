@@ -1,6 +1,7 @@
 
 PostgreSQL stand-alone backend 9.4beta2
-backend> backend> backend> outer:
+backend> backend> backend> jointype=0
+outer:
 	 1: objoid = "1242"	(typeid = 26, len = 4, typmod = -1, byval = t)
 	 2: classname = "pg_proc"	(typeid = 19, len = 64, typmod = -1, byval = f)
 	 3: objsubid = "0"	(typeid = 23, len = 4, typmod = -1, byval = t)
@@ -44350,7 +44351,16 @@ result:
 	 3: objsubid = "0"	(typeid = 23, len = 4, typmod = -1, byval = t)
 	 4: description = "standard POSIX collation"	(typeid = 25, len = -1, typmod = -1, byval = f)
 	----
-backend> backend> backend> outer:
+backend> 	 1: huangruizhe_count	(typeid = 20, len = 8, typmod = -1, byval = t)
+	----
+	 1: huangruizhe_count = "2719"	(typeid = 20, len = 8, typmod = -1, byval = t)
+	----
+backend> 	 1: mid	(typeid = 23, len = 4, typmod = -1, byval = t)
+	----
+	 1: mid = "111111"	(typeid = 23, len = 4, typmod = -1, byval = t)
+	----
+backend> backend> backend> jointype=0
+outer:
 	 1: objoid = "1"	(typeid = 26, len = 4, typmod = -1, byval = t)
 	 2: classname = "pg_database"	(typeid = 19, len = 64, typmod = -1, byval = f)
 	 3: description = "default template for new databases"	(typeid = 25, len = -1, typmod = -1, byval = f)
@@ -45249,7 +45259,13 @@ outer:
 	 1:  = "11327"	(typeid = 26, len = 4, typmod = -1, byval = t)
 	 2:  = "tmp_pg_shdescription"	(typeid = 19, len = 64, typmod = -1, byval = f)
 	----
-backend> outer:
+backend> 	 1: mid	(typeid = 23, len = 4, typmod = -1, byval = t)
+	----
+	 1: mid = "111111"	(typeid = 23, len = 4, typmod = -1, byval = t)
+	----
+backend> jointype=0
+jointype=5
+outer:
 	 1:  = "="	(typeid = 19, len = 64, typmod = -1, byval = f)
 	 2:  = "15"	(typeid = 26, len = 4, typmod = -1, byval = t)
 	 3:  = "int48eq"	(typeid = 24, len = 4, typmod = -1, byval = t)
@@ -63170,5 +63186,9 @@ outer:
 	----
 outer:
 	 1:  = "3993"	(typeid = 26, len = 4, typmod = -1, byval = t)
+	----
+backend> 	 1: huangruizhe_count	(typeid = 20, len = 8, typmod = -1, byval = t)
+	----
+	 1: huangruizhe_count = "2719"	(typeid = 20, len = 8, typmod = -1, byval = t)
 	----
 backend> 

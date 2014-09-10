@@ -586,6 +586,8 @@ ExecInitHashJoin(HashJoin *node, EState *estate, int eflags)
 	ExecInitResultTupleSlot(estate, &hjstate->js.ps);
 	hjstate->hj_OuterTupleSlot = ExecInitExtraTupleSlot(estate);
 
+	printf("jointype=%d\n", (int)node->join.jointype);
+
 	/* set up null tuples for outer joins, if needed */
 	switch (node->join.jointype)
 	{

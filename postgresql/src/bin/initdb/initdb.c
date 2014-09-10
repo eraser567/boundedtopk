@@ -1801,10 +1801,18 @@ setup_description(void)
 	PG_CMD_PRINTF1("COPY tmp_pg_description FROM E'%s';\n",
 				   escape_quotes(desc_file));
 
+	fprintf(stdout, "COPY tmp_pg_description FROM E'%s';\n",
+				   escape_quotes(desc_file));
+	fflush(stdout);
+
 	PG_CMD_PUTS("INSERT INTO pg_description "
 				" SELECT t.objoid, c.oid, t.objsubid, t.description "
 				"  FROM tmp_pg_description t, pg_class c "
 				"    WHERE c.relname = t.classname;\n");
+
+	PG_CMD_PUTS("select count(*) as huangruizhe_count from  pg_description;\n");
+
+	PG_CMD_PUTS("select 111111 as mid;\n");
 
 	PG_CMD_PUTS("CREATE TEMP TABLE tmp_pg_shdescription ( "
 				" objoid oid, "
@@ -1814,10 +1822,16 @@ setup_description(void)
 	PG_CMD_PRINTF1("COPY tmp_pg_shdescription FROM E'%s';\n",
 				   escape_quotes(shdesc_file));
 
+	fprintf(stdout, "COPY tmp_pg_shdescription FROM E'%s';\n",
+				   escape_quotes(shdesc_file));
+	fflush(stdout);
+
 	PG_CMD_PUTS("INSERT INTO pg_shdescription "
 				" SELECT t.objoid, c.oid, t.description "
 				"  FROM tmp_pg_shdescription t, pg_class c "
 				"   WHERE c.relname = t.classname;\n");
+
+	PG_CMD_PUTS("select 111111 as mid;\n");
 
 	/* Create default descriptions for operator implementation functions */
 	PG_CMD_PUTS("WITH funcdescs AS ( "
@@ -1831,6 +1845,8 @@ setup_description(void)
 				"  WHERE opdesc NOT LIKE 'deprecated%' AND "
 				"  NOT EXISTS (SELECT 1 FROM pg_description "
 		  "    WHERE objoid = p_oid AND classoid = 'pg_proc'::regclass);\n");
+
+	PG_CMD_PUTS("select count(*) as huangruizhe_count from  pg_description;\n");
 
 	PG_CMD_CLOSE;
 
